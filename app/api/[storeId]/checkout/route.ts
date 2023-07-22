@@ -46,7 +46,7 @@ export async function POST(
       },
     });
   });
-  
+
   const order = await prismadb.order.create({
     data: {
       storeId: params.storeId,
@@ -55,12 +55,12 @@ export async function POST(
         create: productIds.map((productId: string) => ({
           product: {
             connect: {
-              id: productId
-            }
-          }
-        }))
-      }
-    }
+              id: productId,
+            },
+          },
+        })),
+      },
+    },
   });
 
   const session = await stripe.checkout.sessions.create({
@@ -70,8 +70,8 @@ export async function POST(
     phone_number_collection: {
       enabled: true,
     },
-    success_url: `${process.env.FRONT_STORE_URL}/cart?success=1`,
-    cancel_url: `${process.env.FRONT_STORE_URL}/cart?canceled=1`,
+    success_url: "https://store-ecommerce-murex.vercel.app/cart?success=1",
+    cancel_url: "https://store-ecommerce-murex.vercel.app/cart?canceled=1",
     metadata: {
       orderId: order.id,
     },
